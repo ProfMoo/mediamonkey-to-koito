@@ -114,8 +114,7 @@ def write_year_file(out_dir: Path, year: int, records: list[dict]) -> Path:
 def convert(db_path: Path, out_dir: Path) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
-    conn.row_factory = sqlite3.Row
+    conn = _open(db_path)
 
     by_year: dict[int, list[dict]] = defaultdict(list)
     total = 0
