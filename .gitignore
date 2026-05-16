@@ -1,0 +1,8 @@
+*.DB
+*.db
+output/
+__pycache__/
+*.pyc
+.venv/
+.idea/
+.vscode/
