@@ -1,6 +1,6 @@
 *.DB
 *.db
-output/
+output*/
 __pycache__/
 *.pyc
 .venv/
