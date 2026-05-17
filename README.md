@@ -10,7 +10,7 @@ My ~125k library from 2013-2021 completed in just a few seconds :)
 python mm2koito.py path/to/MediaMonkey.DB --out output/
 ```
 
-Then copy the generated `Streaming_History_Audio_<year>_0.json` files into your Koito `import/` folder and restart Koito. See [Koito's import guide](https://koito.io/guides/importing/).
+Then copy the generated `Streaming_History_Audio_<year>.json` files into your Koito `import/` folder and restart Koito. See [Koito's import guide](https://koito.io/guides/importing/).
 
 Requires Python 3.9+ (stdlib only).
 
