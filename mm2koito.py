@@ -23,6 +23,10 @@ Time zones: MM stores PlayDate as an OLE Automation date (days since
 1899-12-30) in local time, with UTCOffset (days, e.g. -0.1666 = -4h)
 being the user's TZ offset at the moment of play. UTC instant is
 therefore `PlayDate - UTCOffset` applied to the OLE epoch in UTC.
+
+Koito detail: Koito's Spotify importer currently only imports rows where
+`reason_end == "trackdone"`. MediaMonkey's `Played` rows represent
+completed plays, so emitted records use that value deliberately.
 """
 
 from __future__ import annotations
@@ -81,12 +85,10 @@ def build_record(row: sqlite3.Row) -> dict:
     ts = ole_to_utc(row["PlayDate"], row["UTCOffset"])
     return {
         "ts": ts.strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "username": None,
-        "platform": "mediamonkey",
+        "platform": "windows",
         "ms_played": ms,
-        "conn_country": None,
-        "ip_addr_decrypted": None,
-        "user_agent_decrypted": None,
+        "conn_country": "",
+        "ip_addr": "",
         "master_metadata_track_name": row["SongTitle"],
         "master_metadata_album_artist_name": artist,
         "master_metadata_album_album_name": row["Album"],
@@ -94,18 +96,22 @@ def build_record(row: sqlite3.Row) -> dict:
         "episode_name": None,
         "episode_show_name": None,
         "spotify_episode_uri": None,
-        "reason_start": None,
-        "reason_end": None,
-        "shuffle": None,
-        "skipped": None,
-        "offline": None,
+        "audiobook_title": None,
+        "audiobook_uri": None,
+        "audiobook_chapter_uri": None,
+        "audiobook_chapter_title": None,
+        "reason_start": "trackdone",
+        "reason_end": "trackdone",
+        "shuffle": False,
+        "skipped": False,
+        "offline": False,
         "offline_timestamp": None,
-        "incognito_mode": None,
+        "incognito_mode": False,
     }
 
 
 def write_year_file(out_dir: Path, year: int, records: list[dict]) -> Path:
-    path = out_dir / f"Streaming_History_Audio_{year}_0.json"
+    path = out_dir / f"Streaming_History_Audio_{year}.json"
     with path.open("w", encoding="utf-8") as f:
         json.dump(records, f, ensure_ascii=False, indent=2)
     return path
